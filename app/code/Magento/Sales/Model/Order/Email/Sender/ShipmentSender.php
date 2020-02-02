@@ -19,6 +19,8 @@ use Magento\Framework\DataObject;
 /**
  * Class ShipmentSender
  *
+ * @deprecated
+ * @see \Magento\Sales\Model\Order\Shipment\Sender\EmailSender
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShipmentSender extends Sender

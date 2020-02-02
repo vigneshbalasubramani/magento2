@@ -12,7 +12,7 @@ use Magento\Backend\App\Action;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
-use Magento\Sales\Model\Order\Email\Sender\ShipmentSender;
+use Magento\Sales\Model\Order\Shipment\Sender\EmailSender;
 use Magento\Sales\Model\Order\ShipmentFactory;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Service\InvoiceService;
@@ -38,9 +38,9 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
     protected $invoiceSender;
 
     /**
-     * @var ShipmentSender
+     * @var EmailSender
      */
-    protected $shipmentSender;
+    protected $emailSender;
 
     /**
      * @var ShipmentFactory
@@ -66,7 +66,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
      * @param Action\Context $context
      * @param Registry $registry
      * @param InvoiceSender $invoiceSender
-     * @param ShipmentSender $shipmentSender
+     * @param EmailSender $emailSender
      * @param ShipmentFactory $shipmentFactory
      * @param InvoiceService $invoiceService
      * @param SalesData $salesData
@@ -75,14 +75,14 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
         Action\Context $context,
         Registry $registry,
         InvoiceSender $invoiceSender,
-        ShipmentSender $shipmentSender,
+        EmailSender $emailSender,
         ShipmentFactory $shipmentFactory,
         InvoiceService $invoiceService,
         SalesData $salesData = null
     ) {
         $this->registry = $registry;
         $this->invoiceSender = $invoiceSender;
-        $this->shipmentSender = $shipmentSender;
+        $this->emailSender = $emailSender;
         $this->shipmentFactory = $shipmentFactory;
         $this->invoiceService = $invoiceService;
         parent::__construct($context);
@@ -223,7 +223,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
             if ($shipment) {
                 try {
                     if (!empty($data['send_email']) || $this->salesData->canSendNewShipmentEmail()) {
-                        $this->shipmentSender->send($shipment);
+                        $this->emailSender->send($shipment);
                     }
                 } catch (\Exception $e) {
                     $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);

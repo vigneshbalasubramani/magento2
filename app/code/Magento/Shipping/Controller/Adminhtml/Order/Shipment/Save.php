@@ -34,9 +34,9 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
     protected $labelGenerator;
 
     /**
-     * @var \Magento\Sales\Model\Order\Email\Sender\ShipmentSender
+     * @var \Magento\Sales\Model\Order\Shipment\Sender\EmailSender
      */
-    protected $shipmentSender;
+    protected $emailSender;
 
     /**
      * @var \Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface
@@ -47,21 +47,21 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader
      * @param \Magento\Shipping\Model\Shipping\LabelGenerator $labelGenerator
-     * @param \Magento\Sales\Model\Order\Email\Sender\ShipmentSender $shipmentSender
+     * @param \Magento\Sales\Model\Order\Shipment\Sender\EmailSender $emailSender
      * @param \Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface|null $shipmentValidator
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader,
         \Magento\Shipping\Model\Shipping\LabelGenerator $labelGenerator,
-        \Magento\Sales\Model\Order\Email\Sender\ShipmentSender $shipmentSender,
+        \Magento\Sales\Model\Order\Shipment\Sender\EmailSender $emailSender,
         \Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface $shipmentValidator = null
     ) {
         parent::__construct($context);
 
         $this->shipmentLoader = $shipmentLoader;
         $this->labelGenerator = $labelGenerator;
-        $this->shipmentSender = $shipmentSender;
+        $this->emailSender = $emailSender;
         $this->shipmentValidator = $shipmentValidator ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Sales\Model\Order\Shipment\ShipmentValidatorInterface::class);
     }
@@ -157,7 +157,7 @@ class Save extends \Magento\Backend\App\Action implements HttpPostActionInterfac
             $this->_saveShipment($shipment);
 
             if (!empty($data['send_email'])) {
-                $this->shipmentSender->send($shipment);
+                $this->emailSender->send($shipment);
             }
 
             $shipmentCreatedMessage = __('The shipment has been created.');

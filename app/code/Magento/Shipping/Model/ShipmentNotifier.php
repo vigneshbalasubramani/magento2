@@ -7,7 +7,7 @@
 namespace Magento\Shipping\Model;
 
 use Psr\Log\LoggerInterface as Logger;
-use Magento\Sales\Model\Order\Email\Sender\ShipmentSender;
+use Magento\Sales\Model\Order\Shipment\Sender\EmailSender;
 use Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory;
 
 /**
@@ -27,19 +27,19 @@ class ShipmentNotifier extends \Magento\Sales\Model\AbstractNotifier
     protected $logger;
 
     /**
-     * @var ShipmentSender
+     * @var EmailSender
      */
     protected $sender;
 
     /**
      * @param CollectionFactory $historyCollectionFactory
      * @param Logger $logger
-     * @param ShipmentSender $sender
+     * @param EmailSender $sender
      */
     public function __construct(
         CollectionFactory $historyCollectionFactory,
         Logger $logger,
-        ShipmentSender $sender
+        EmailSender $sender
     ) {
         $this->historyCollectionFactory = $historyCollectionFactory;
         $this->logger = $logger;
